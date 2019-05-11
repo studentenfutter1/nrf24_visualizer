@@ -49,16 +49,24 @@ def animate(i, ys):
                 (msg, l) = nrf24.recv()
                 msgList = list(msg)
                 msgLen = len(msgList)
+                
 
                 if  msgLen > 28:
                         msgList = msgList[:28] # cut off after 28
-
+                elif msgLen < 28:
+                        c=msgLen
+                        while c < 28:
+                            msgList.append(0) # append 0 to empty list
+                            c = c+1
+                
+                
                 c = 0 
                 while c < len(msgList)/2 - 1: # for loop 
                         highByte = msgList[c*2]
                         lowByte = msgList[(c*2) +1]
                         adc_value = (highByte << 8) | lowByte
                         ys.append(adc_value) # add value to ys list
+                        print(adc_value)
                         c = c+1 # increment loop counter
 
         # Limit y list to set number of items
