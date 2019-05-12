@@ -46,18 +46,25 @@ print("Receiving...")
 def animate(i, ys):
         if nrf24.available():
                 adc_value = 0;
-                (msg, l) = nrf24.recv()
+                (msg, l) = nrf24.recv() # bytearray, hört auf bei 0x00
+                print(msg)      # ->wenn  0x00 übertragen wird kommt msg == b''
+                
+
+                #if msg == bytearray('', 'utf-8'):
+                      #  print("DEBUG")
+                     #   msg = bytearray(0)
+
                 msgList = list(msg)
                 msgLen = len(msgList)
-                
 
                 if  msgLen > 28:
                         msgList = msgList[:28] # cut off after 28
-                elif msgLen < 28:
+                
+                elif msgLen == 0: # fill empty list
                         c=msgLen
                         while c < 28:
-                            msgList.append(0) # append 0 to empty list
-                            c = c+1
+                                msgList.append(0) # append 0 to empty list
+                                c = c+1
                 
                 
                 c = 0 
